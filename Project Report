@@ -1,0 +1,160 @@
+
+
+
+CS542 Project:
+Link State Routing Protocol
+
+
+DIJKSTRA'S ALGORITHM
+•	In this algorithm, the shortest paths within nodes (routers) are calculated depending on the cost values of edges.  It is necessary for all the edges to have non-negative costs.
+
+•	Dijkstra’s algorithm is iterative and has the property that after the kth iteration of the algorithm, the least-cost paths are known to k destination nodes, and among the least-cost paths to all destination nodes, these k paths will have the k smallest costs. 
+
+•	It is a greedy algorithm and begins at the source router. Then depending on the cost of the edges it further adds additional routers to the path. Initially all the routers have infinite cost which means they are not visited yet and the source router has 0 cost so that this is selected at the beginning due to its lowest cost.
+
+We find the shortest path to all the other routers in the network given a source router. We need to make use of the costs which are stored in a 2 dimensional array. The given source router is considered as root and the shortest path graph is calculated. One array is used to maintain the router numbers that are included in the shortest path and other one checks for the unvisited routers. We continuously iterate to check for the router that is present in the unvisited routers array and have low cost (distance) from the first router.
+The algorithm is explained in following steps:
+1.	Assign distance value as infinite to all the routers in the network and assign 0 value to the source router so that its distance is minimum and can be picked first.
+2.	Maintain an array named pathArray which would maintain the router numbers included in the shortest path. This path is calculated by checking the minimum distance from the source router.
+3.	for sourceRouter to number_of_routers
+  	select a router u which is not in shortPathVetices and has minimum distance
+	include router u into the shortPathVertices array
+	for each adjacent router R, if the sum of distance of R from source and the link cost of u-     		R is less than the cost of R then update the distance of R.
+Pseudo  Code:
+ShortestPaths(source,cost,distance,nRouters)
+/*distance[i], 1≤i≤nRouters, is set to the length of the shortest path from vertex source to i with total nVertices. distance[source] = 0 initially since all other are set to infinite. */
+{
+for i=0 to nRouters do
+	{
+ 	Initialize S    	//S is the array to keep track of the visited routers
+	S[i] = false;
+	dist[i] = cost[source,i];
+	}
+	S[v]=true; //put router v in S
+	dist[i]=0;
+	for i =1 to nRouters do
+	{
+   	//Determine n-1 paths from v.Choose u router among those which are not in S such that dist[u] 	is minimum
+	S[u]=true;	//Put u in S
+	for each adjacent router w which is not yet included in S do
+	{
+	//update distance
+	if(dist[w]>(dist[u] + cost[u,w])) then
+		dist[w]=dist[u] + cost[u,w];  
+ 	}
+}
+DESIGN:
+Assumptions:
+1.	The network topology and the link cost between routers is known.
+2.	The input file consists of matrix n*n where n is the number of routers and if there is no direct connection between  2 routers then the cost is -1.
+The design of this project includes a menu consisting of 5 choices namely: 
+1. Create Topology
+2. Build Connection Table
+3. Source to destination path
+4. Remove router
+5. Exit.
+The user is expected to choose an option out of above given. However, before performing any other actions, user is expected to choose first option since other commands cannot be followed without creating a topology. On choosing first option, the connection tables for all the routers are displayed by default.
+The Connection table gives the interface followed by a particular router to reach the destination mentioned in first column using the shortest path possible depending on the cost.
+The third option is the source to destination path which asks the user for a particular destination and then displays the shortest path taken for a packet to reach from the given source to destination.
+The 4th option is remove router which when selected by user removes the entered router from the topology and then displays the updated connection table. This option is designed in such a way that it can handled any scenario where user tried to remove either source, destination or removed router.
+The exit option simply displays goodbye message and stop displaying the menu choices again.
+WHY DIJKSTRA'S ALGORITHM:
+
+•	As mentioned, Dijkstra’s algorithm calculates the shortest path to every router. 
+•	However, it is about as computationally expensive to calculate the shortest path from source router to every vertex using Dijkstra’s as it is to calculate the shortest path to some particular router R.
+•	Therefore, anytime we want to know the optimal path to some other router from a fixed source, we can use Dijkstra’s algorithm.
+
+
+Functionalities:
+
+1. createTopology: This function takes input from the user for the path where the input file resides. This file is then read and the matrix is stored in a 2 dimensional matrix (matrix) and it is printed for the user to review.  This method also extracts the number of routers in the topology from the size of matrix since the input file would be having n*n matrix where n is the number of routers.
+
+2. dijkstrasAlgo: This function declares 2 arrays shortpathVertices and distanceArray for storing the visited router numbers for shortest path and the distance between routers respectively. It iterates through all the routers to check if the router is visited or not and also checks for the minimum distance. Later it assigns the minimum of the adjacent router into the pathArray, which keeps track of the shortest path. Here it is also checked whether a given router is removed from the topology and if it removed then the distance is not calculated for that particular router number.
+
+3. printConnectionTable: This function is used to print the connection table for a specific source router to all the remaining routers in the topology. In the output of connection table, the first column is  the router number and the second column is the interface selected by the source router in order to reach the particular destination router. Also it is made sure that the source router row number is left blank since there won't be any interface for the source router to itself. One more functionality handled by this method is that of a particular is removed then it won't calculate the interface for that router in the connection table.
+
+4. connectionTableAll: This function prints the connection table for all the routers considering them source router. It is printed by default when the user creates the topology in the beginning.
+
+5. srcDestinationPath: This function prompts the user for selecting the destination router. And then it prints the shortest path (router numbers in the path) calculated from the source to entered destination router. This function also handles the scenario where a certain router is removed from the topology and due to that if there is no path between the source and destination then it displays so. Also the total cost for the shortest path is displayed.
+
+6. removeRouter: This method prompts the user for inputting the router number which is to be removed from the topology. And then it calls the dijkstra's algorithm again to recalculate the shortest path and output the updated connection table and updated path & cost for that particular source to destination selected previously. It also handles the scenario if the source and destination have not been selected previously then it asks the user to enter them and then calculates the shortest path & distance.
+It also handles the scenario where if the user has selected the source router and then tries to remove that source router itself. Then it is prompted to select another source router.
+	
+Removing Source and Destination routers: This functionality is implemented in the removeRouter method where if the user tries to remove the source or destination router then it is prompted to the user to select a new source and destination and accordingly the path is updated. Also if a user removes the router which was the only connection between two routers then appropriate message is displayed that the path is lost due to removed router.
+
+7. exit: This function simply prints the goodbye message and stops displaying the menu again.
+
+FLOW OF PROGRAM:
+
+The flow is explained in following steps
+
+1.	The main function is called when the java file is executed. This would display the menu to the user consisting of 5 options as explained above.
+2.	On selecting the option 1, createToplogy and connectionTableAll method are called where the input file is taken from user, the matrix is formed and then default connection tables for all routers are displayed.
+3.	On selecting option 2, the dijkstrasAlgo and printConnectionTable methods are called which would prompt for user to enter source router and then calculate the shortest path and print them for the entered source router. 
+4.	On selecting the option 3, the user is prompted to enter the destination router and then the call goes to dijkstrasAlgo for calculating the shortest path and cost which is then displayed on the screen.
+5.	On selecting the flow goes to removeRouter method where it checks if the entered router number is source or destination or already removed router. Accordingly the user is prompted to enter new source or destination. Or the user is displayed the message saying the router is down or after removing there is no path between source and destination. In all the methods and conditions, the printConnectionTable is called after updating the shortest paths and distance matrix.
+
+Test Report:
+
+The input file used for testing is a .txt file consisting of 8*8 matrix having values of the costs between routers. The graphical representation of the topology is as follows:
+ 
+
+
+
+
+
+
+
+
+
+
+Test Scenario 1: Choosing option 1 to 5 one after the other from the menu
+
+  
+
+
+  
+
+As seen from the above screenshots, it can be seen that after selecting option 1, the user is prompted for path of input file which when correctly given, it displays the connection table for all the routers. 
+                               
+
+On selecting option 2 from the menu, the user is prompted for entering a source router and then the connection table is displayed for that router.
+
+                  
+
+On choosing option 3 from the menu, the user is prompted to enter the destination router and the output would be the shortest path from the above source router and entered destination as follows:
+                           
+
+On selecting option 4, the user is asked for router number to be removed which is then removed from the topology and the updated connection table and shortest path along with the cost are displayed.
+
+Test Scenario 2: The option 4 is directly selected without selecting 2 and 3 first.
+                    
+
+As seen in above screenshot, if the user has not yet selected 2 or 3 then the user is prompted to enter new source and destination, then the updated connection table and shortest path along with cost are displayed.
+
+Test Scenario 3: If a router is removed which was the only connection between 2 routers.
+                         
+In this case, the only connection between 2 and 4 is 3rd router. And when it is removed, it is displayed that path does not exists since the intermediate router is down.
+
+Test Scenario 4: When the source router is removed.
+                                    
+As seen in above scenario, when the source router is removed, the user is prompted to enter another source router and the updated path and cost is displayed.
+
+Test Scenario 6: Removed router is tried to be removed again
+ 
+AS seen above, when the removed router is tried to be removed again, the user is displayed message that the entered router is down.
+
+Test scenario 7: Invalid menu choices
+  
+ 
+
+As seen above, if a user tries to enter any invalid number or entry other than number 1 to 5 then there is an error message printed to ask user to print correct input.
+
+Conclusion:
+As seen in the test results, all the scenarios are successfully handled by the design and code. Thus the dijkstra's algorithm is successfully implemented to calculated the shortest path between source and destination router(s).
+
+References:
+
+	James F Kurose, Keith W Ross, Computer Networking A Top-Down Approach, Pearson Education, Inc., 2013 
+	Java Documentation. 
+
