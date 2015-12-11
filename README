@@ -1,0 +1,68 @@
+------------------------------------------
+Files in the folder
+------------------------------------------
+CS542Project_02_More_Sheetal.exe
+CS542Project_02_More_Sheetal.jar
+CS542Project_02_More_Sheetal_README.docx
+CS542Project_02_More_Sheetal_REPORT.docx
+CS542Project_02_More_Sheetal_PPT
+linkStateRouting.java (source code)
+input.txt (input network topology consisting of 2 dimensional matrix of 8 routers)
+--------------------------------------------
+What is Shortest Path Algorithm
+--------------------------------------------
+I have implemented an algorithm which would compute the shortest path from a specific source router to destination router. Also there is facility to check what happens if a particular router is down in a network. I have handled that case by re routing the table and then updating the connection table for the selected source router.
+--------------------------------------------
+How to run?
+-------------------------------------------
+The program can be run in 2 ways as follows. Please follow given steps:
+
+Option 1:
+1. Open Command Prompt
+2. Change directory to where the jar file is saved at by typing: cd directoryPathName
+3. Type the command:  java -jar CS542Project_02_More_Sheetal.jar
+4. When prompted for input file please type the entire file path where the  .txt file is saved along with the file name. (Example: C:\Users\Sheetal\Desktop\input.txt)
+
+Option 2:
+Double click on the CS542Project_02_More_Sheetal.exe file and click on run if prompted.
+
+ Simply running the .jar file would output the menu which consists of 5 options. It is necessary to create topology before doing any other task i.e. the choice 1 is to be chosen before choosing any other options.
+
+----------------------------------------------------
+What Should be the format of input file?
+----------------------------------------------------
+The input should consists of the n*n matrix with each value separated by a space where n is the number of routers. In this file matrix, the element at nth row and nth column is the distance between those 2 routers and if there is no direct connection then the distance is given by -1.
+The numbers in the matrix should be separated by a single space and every new row should be on new line. I have implemented for minimum 8 routers. The sample input file is uploaded in the folder. (EXTRA CREDIT)
+
+---------------------------------------------
+How does it work?
+---------------------------------------------
+1. Create network topology: This option takes input from user as the text file which consists of 2 dimensional matrix having the costs between the routers. For example, the element a13  (1st row and 3rd column) would give the cost value between 1st and 3rd router. And if there is no direct connection between 2 routers then the cost would be -1. The routers are numbered starting from 0 to n. On clicking the option, the default connection tables for all routers is displayed. (EXTRA CREDIT)
+
+2. Build Connection table: This option lets user select a particular router as source router. Then it would print the connection table for that router. The connection table gives the interface for a particular source router to all destination routers. 
+
+3. Source to Destination path: This option lets the user select a particular destination so that the shortest path from the source to that destination is calculated and displayed along with the cost for that shortest path.
+
+4. Router down: This option lets user to select a router which is supposedly down or removed from the topology. Thus after selecting this, the algorithm is run again in order to display the updated path if that removed router was present in the shortest path calculated in above steps.
+
+5. Exit: This option simply lets user to exit from the project and thus stops displaying the menu again.
+
+-----------------------------------------
+Methods used:
+-----------------------------------------
+
+1. CreateTopology: This method takes the input from user for the text file consisting of 2 dimensional matrix.
+
+2. dijkstrasAlgo: This method calculates the shortest path between source and destination routers. It returns the distanceArray which is distance between routers.
+
+3. connectionTable: This method calls the dijskstra's method and then calculates the distance 
+
+4. printConnectionTable: This method prints the connection table for a particular router 
+
+5. connectionTableAll: This method by default prints the connection table for all the routers once the network topology is created. This is achieved by assuming every router as the source router.
+
+6. srcDestinationPath: This method keeps track of the routers visited while calculating the shortest path between source and destination router.
+7. removeRouter: This method prompts the user for inputting the router number which is to be removed from the topology. And then it calls the dijkstra's algorithm again to recalculate the shortest path and output the updated connection table.
+
+8. Exit: This method simply prints the goodbye message and stops printing the menu choices.
+
